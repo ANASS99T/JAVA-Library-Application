@@ -71,11 +71,20 @@ public class exemplaire {
 	public static void deleteExemplaire(int id)
 	{
 		try {
-			CallableStatement st = conn.prepareCall("{call supprimerExemplaire(?)}");
-			
-			st.setInt(1, id);
+			CallableStatement st = conn.prepareCall("{? = call dispo_exemplaire(?)}");
+			st.registerOutParameter(1,java.sql.Types.INTEGER);
+			st.setInt(2, id);
 			st.execute();
-	
+			int existe = st.getInt(1);
+			if(existe == 0)
+			{
+				JOptionPane.showMessageDialog(null, "Cet exmplaire n\'est pas disponible, vous ne pouvez pas le supprimer");
+				return;
+			}
+			
+			CallableStatement st1 = conn.prepareCall("{call supprimerExemplaire(?)}");
+			st1.setInt(1, id);
+			st1.execute();
 			JOptionPane.showMessageDialog(CAAN.App, "L\'operation reussit");
 			
 		} catch (SQLException e1) {

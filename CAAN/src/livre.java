@@ -1,5 +1,6 @@
 import java.sql.CallableStatement;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -156,10 +157,31 @@ public class livre {
 			int existe = livreExisteS.getInt(1);
 			if(existe == 1)
 			{
-				CallableStatement addLivreS = conn.prepareCall("{call supprimerLivre(?)}");
-				addLivreS.setInt(1, id);
-				addLivreS.execute();
+				
+				CallableStatement livredispoS = conn.prepareCall("{? = call dbo.livre_dispo(?)}");
+				livredispoS.registerOutParameter(1,java.sql.Types.INTEGER);
+				livredispoS.setInt(2, id);
+				livredispoS.execute();
+				int testdispo = livredispoS.getInt(1);
+				if(testdispo == 0)
+				{
+					JOptionPane.showMessageDialog(null, "Il y\'a des exemplaires non retournes pour ce livre");
+					return;
+				}
+				else
+				{
+					try {
+				CallableStatement suppExS = conn.prepareCall("{call supprimerExemplaireParIdLivre(?)}");
+				suppExS.setInt(1, id);
+				suppExS.execute();
+					}catch (SQLException e1) {
+						// TODO: handle exception
+					}
+				CallableStatement suppLiS = conn.prepareCall("{call supprimerLivre(?)}");
+				suppLiS.setInt(1, id);
+				suppLiS.execute();
 				JOptionPane.showMessageDialog(CAAN.App, "L\'operation reussit");
+				}
 			}
 				
 			else
@@ -210,6 +232,7 @@ public class livre {
 			int existe = livreExisteS.getInt(1);
 			if(existe == 1)
 			{
+				
 				CallableStatement addLivreS = conn.prepareCall("{call supprimerCategorie(?)}");
 				addLivreS.setInt(1, idC);
 				addLivreS.execute();
@@ -222,7 +245,7 @@ public class livre {
 				return;
 			}
 		} catch (SQLException e1) {
-			JOptionPane.showMessageDialog(CAAN.App, "Erreur in SupprimerCat");
+			JOptionPane.showMessageDialog(CAAN.App, "Vous ne pouvez pas supprimer cette categorie");
 			e1.printStackTrace();
 		}
 	}
@@ -276,7 +299,7 @@ public class livre {
 				return;
 			}
 		} catch (SQLException e1) {
-			JOptionPane.showMessageDialog(CAAN.App, "Erreur in SupprimerAuteur");
+			JOptionPane.showMessageDialog(CAAN.App, "Vous ne pouvez pas supprimer cet auteur");
 			e1.printStackTrace();
 		}
 	}

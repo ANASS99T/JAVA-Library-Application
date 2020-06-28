@@ -53,7 +53,9 @@ public class CAAN extends JFrame {
 	
 	
 	//methods
-	private JTable table;
+	private JTable tableOffre;
+	private JTable tableCherche;
+	private JTable tableExtern;
 	
 	public void Clients(int type, String val) {
 		
@@ -64,7 +66,7 @@ public class CAAN extends JFrame {
 				stm.setInt(1, type);
 				stm.setString(2, val);
 				ResultSet rs = stm.executeQuery();
-				table.setModel(DbUtils.resultSetToTableModel(rs));
+				tableExtern.setModel(DbUtils.resultSetToTableModel(rs));
 			   }
 				catch(Exception exe) {
 					exe.printStackTrace();
@@ -80,7 +82,7 @@ public class CAAN extends JFrame {
 			CallableStatement stm = conn.prepareCall(query);
 			stm.setInt(1, id);
 			ResultSet rs = stm.executeQuery();
-			table.setModel(DbUtils.resultSetToTableModel(rs));
+			tableExtern.setModel(DbUtils.resultSetToTableModel(rs));
 		   }
 			catch(Exception exe) {
 				exe.printStackTrace();
@@ -93,7 +95,7 @@ public class CAAN extends JFrame {
 			String query = "{CALL AfficherClients()}";
 			CallableStatement stm = conn.prepareCall(query);
 			ResultSet rs = stm.executeQuery();
-			table.setModel(DbUtils.resultSetToTableModel(rs));
+			tableExtern.setModel(DbUtils.resultSetToTableModel(rs));
 		   }
 			catch(Exception exe) {
 				exe.printStackTrace();
@@ -101,7 +103,7 @@ public class CAAN extends JFrame {
 	}
 
 	
-	public void chercherExemplaireParIDE(int id)
+	public void chercherExemplaireParIDE(int id,int table)
 	{
 		try {
 			String query = "{CALL ChercherExemplaire(?,?)}";
@@ -109,14 +111,17 @@ public class CAAN extends JFrame {
 			stm.setInt(1, 1);
 			stm.setInt(2, id);
 			ResultSet rs = stm.executeQuery();
-			table.setModel(DbUtils.resultSetToTableModel(rs));
+			if(table == 1)
+			tableExtern.setModel(DbUtils.resultSetToTableModel(rs));
+			else
+			tableCherche.setModel(DbUtils.resultSetToTableModel(rs));
 		   }
 			catch(Exception exe) {
 				exe.printStackTrace();
 			}
 	}
 	
-	public void chercherExemplaireParIDL(int id)
+	public void chercherExemplaireParIDL(int id,int table)
 	{
 		try {
 			String query = "{CALL ChercherExemplaire(?,?)}";
@@ -124,13 +129,16 @@ public class CAAN extends JFrame {
 			stm.setInt(1, 2);
 			stm.setInt(2, id);
 			ResultSet rs = stm.executeQuery();
-			table.setModel(DbUtils.resultSetToTableModel(rs));
+			if(table == 1)
+			tableExtern.setModel(DbUtils.resultSetToTableModel(rs));
+			else
+			tableCherche.setModel(DbUtils.resultSetToTableModel(rs));
 		   }
 			catch(Exception exe) {
 				exe.printStackTrace();
 			}
 	}
-	public void chercherExemplairePardispo(int dispo)
+	public void chercherExemplairePardispo(int dispo,int table)
 	{
 		try {
 			String query = "{CALL ChercherExemplaire(?,?)}";
@@ -138,13 +146,16 @@ public class CAAN extends JFrame {
 			stm.setInt(1, 3);
 			stm.setInt(2, dispo);
 			ResultSet rs = stm.executeQuery();
-			table.setModel(DbUtils.resultSetToTableModel(rs));
+			if(table == 1)
+			tableExtern.setModel(DbUtils.resultSetToTableModel(rs));
+			else
+			tableCherche.setModel(DbUtils.resultSetToTableModel(rs));
 		   }
 			catch(Exception exe) {
 				exe.printStackTrace();
 			}
 	}
-	public void chercherExemplaireParIDLetDispo(int id, int dispo)
+	public void chercherExemplaireParIDLetDispo(int id, int dispo,int table)
 	{
 		try {
 			String query = "{CALL ChercherExemplaireLD(?,?)}";
@@ -152,7 +163,10 @@ public class CAAN extends JFrame {
 			stm.setInt(1, id);
 			stm.setInt(2, dispo);
 			ResultSet rs = stm.executeQuery();
-			table.setModel(DbUtils.resultSetToTableModel(rs));
+			if(table == 1)
+			tableExtern.setModel(DbUtils.resultSetToTableModel(rs));
+			else
+			tableCherche.setModel(DbUtils.resultSetToTableModel(rs));
 		   }
 			catch(Exception exe) {
 				exe.printStackTrace();
@@ -169,7 +183,7 @@ public class CAAN extends JFrame {
 			String query = "{CALL AfficherExemplaires()}";
 			CallableStatement stm = conn.prepareCall(query);
 			ResultSet rs = stm.executeQuery();
-			table.setModel(DbUtils.resultSetToTableModel(rs));
+			tableExtern.setModel(DbUtils.resultSetToTableModel(rs));
 		   }
 			catch(Exception exe) {
 				exe.printStackTrace();
@@ -182,7 +196,7 @@ public class CAAN extends JFrame {
 				Connection conn = Utilitaire.getConnection();
 				CallableStatement ps =conn.prepareCall("{call afficherOffre()} ");
 				ResultSet rs = ps.executeQuery();
-				table.setModel(DbUtils.resultSetToTableModel(rs));
+				tableOffre.setModel(DbUtils.resultSetToTableModel(rs));
 				
 			   }
 				catch(Exception exe) {
@@ -198,12 +212,14 @@ public class CAAN extends JFrame {
 			stm.setInt(1, type);
 			stm.setInt(2, id);
 			ResultSet rs = stm.executeQuery();
-			table.setModel(DbUtils.resultSetToTableModel(rs));
+			tableCherche.setModel(DbUtils.resultSetToTableModel(rs));
 		   }
 			catch(Exception exe) {
 				exe.printStackTrace();
 			}
 	}
+	
+	
 	
 	public void chercherLivreParNom(String nom)
 	{
@@ -213,7 +229,7 @@ public class CAAN extends JFrame {
 			stm.setInt(1, 2);
 			stm.setString(2, nom);
 			ResultSet rs = stm.executeQuery();
-			table.setModel(DbUtils.resultSetToTableModel(rs));
+			tableCherche.setModel(DbUtils.resultSetToTableModel(rs));
 		   }
 			catch(Exception exe) {
 				exe.printStackTrace();
@@ -226,7 +242,7 @@ public class CAAN extends JFrame {
 			String query = "{CALL AfficherLivre()}";
 			CallableStatement stm = conn.prepareCall(query);
 			ResultSet rs = stm.executeQuery();
-			table.setModel(DbUtils.resultSetToTableModel(rs));
+			tableExtern.setModel(DbUtils.resultSetToTableModel(rs));
 		   }
 			catch(Exception exe) {
 				exe.printStackTrace();
@@ -239,7 +255,7 @@ public class CAAN extends JFrame {
 			String query = "{CALL AfficherCategorie()}";
 			CallableStatement stm = conn.prepareCall(query);
 			ResultSet rs = stm.executeQuery();
-			table.setModel(DbUtils.resultSetToTableModel(rs));
+			tableExtern.setModel(DbUtils.resultSetToTableModel(rs));
 		   }
 			catch(Exception exe) {
 				exe.printStackTrace();
@@ -252,7 +268,7 @@ public class CAAN extends JFrame {
 			String query = "{CALL AfficherAuteur()}";
 			CallableStatement stm = conn.prepareCall(query);
 			ResultSet rs = stm.executeQuery();
-			table.setModel(DbUtils.resultSetToTableModel(rs));
+			tableExtern.setModel(DbUtils.resultSetToTableModel(rs));
 		   }
 			catch(Exception exe) {
 				exe.printStackTrace();
@@ -263,6 +279,7 @@ public class CAAN extends JFrame {
 		App.setIconImage(icon.getImage());
 		App.setSize(1034, 700);
 		App.getContentPane().setLayout(null);
+		App.setResizable(true);
 		App.setVisible(true);
 		
 		// ------------- MENU BAR --------------------
@@ -1394,10 +1411,10 @@ public class CAAN extends JFrame {
 						JDialog D = new JDialog(App, "C.A.A.N");
 						D.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 						D.setSize(700, 250);
-						JScrollPane scrollPane = new JScrollPane(table);
+						JScrollPane scrollPane = new JScrollPane(tableExtern);
 						scrollPane.setBounds(0, 0, 700, 250);
-						table = new JTable();
-						scrollPane.setViewportView(table);
+						tableExtern = new JTable();
+						scrollPane.setViewportView(tableExtern);
 						ClientsId(id);
 						D.add(scrollPane);
 						D.setVisible(true); 
@@ -1408,10 +1425,10 @@ public class CAAN extends JFrame {
 						JDialog D = new JDialog(App, "C.A.A.N");
 						D.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 						D.setSize(700, 250);
-						JScrollPane scrollPane = new JScrollPane(table);
+						JScrollPane scrollPane = new JScrollPane(tableExtern);
 						scrollPane.setBounds(0, 0, 700, 250);
-						table = new JTable();
-						scrollPane.setViewportView(table);
+						tableExtern = new JTable();
+						scrollPane.setViewportView(tableExtern);
 						Clients(1,nom);
 						D.add(scrollPane);
 						D.setVisible(true); 
@@ -1423,10 +1440,10 @@ public class CAAN extends JFrame {
 						JDialog D = new JDialog(App, "C.A.A.N");
 						D.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 						D.setSize(700, 250);
-						JScrollPane scrollPane = new JScrollPane(table);
+						JScrollPane scrollPane = new JScrollPane(tableExtern);
 						scrollPane.setBounds(0, 0, 700, 250);
-						table = new JTable();
-						scrollPane.setViewportView(table);
+						tableExtern = new JTable();
+						scrollPane.setViewportView(tableExtern);
 						Clients(2,prenom);
 						D.add(scrollPane);
 						D.setVisible(true); 
@@ -1438,10 +1455,10 @@ public class CAAN extends JFrame {
 						JDialog D = new JDialog(App, "C.A.A.N");
 						D.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 						D.setSize(700, 250);
-						JScrollPane scrollPane = new JScrollPane(table);
+						JScrollPane scrollPane = new JScrollPane(tableExtern);
 						scrollPane.setBounds(0, 0, 700, 250);
-						table = new JTable();
-						scrollPane.setViewportView(table);
+						tableExtern = new JTable();
+						scrollPane.setViewportView(tableExtern);
 						Clients(3,adresse);
 						D.add(scrollPane);
 						D.setVisible(true); 
@@ -1453,10 +1470,10 @@ public class CAAN extends JFrame {
 						JDialog D = new JDialog(App, "C.A.A.N");
 						D.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 						D.setSize(700, 250);
-						JScrollPane scrollPane = new JScrollPane(table);
+						JScrollPane scrollPane = new JScrollPane(tableExtern);
 						scrollPane.setBounds(0, 0, 700, 250);
-						table = new JTable();
-						scrollPane.setViewportView(table);
+						tableExtern = new JTable();
+						scrollPane.setViewportView(tableExtern);
 						Clients(4,tele);
 						D.add(scrollPane);
 						D.setVisible(true); 
@@ -1497,10 +1514,10 @@ public class CAAN extends JFrame {
 					JDialog D = new JDialog(App, "C.A.A.N");
 					D.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 					D.setSize(700, 250);
-					JScrollPane scrollPane = new JScrollPane(table);
+					JScrollPane scrollPane = new JScrollPane(tableExtern);
 					scrollPane.setBounds(0, 0, 700, 250);
-					table = new JTable();
-					scrollPane.setViewportView(table);
+					tableExtern = new JTable();
+					scrollPane.setViewportView(tableExtern);
 					afficherClient();
 					D.add(scrollPane);
 					D.setVisible(true); 
@@ -2346,11 +2363,11 @@ public class CAAN extends JFrame {
 						JDialog D = new JDialog(App, "C.A.A.N");
 						D.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 						D.setSize(700, 250);
-						JScrollPane scrollPane = new JScrollPane(table);
+						JScrollPane scrollPane = new JScrollPane(tableExtern);
 						scrollPane.setBounds(0, 0, 700, 250);
-						table = new JTable();
-						scrollPane.setViewportView(table);
-						chercherExemplaireParIDE(id);
+						tableExtern = new JTable();
+						scrollPane.setViewportView(tableExtern);
+						chercherExemplaireParIDE(id,1);
 						D.add(scrollPane);
 						D.setVisible(true);
 					}
@@ -2360,11 +2377,11 @@ public class CAAN extends JFrame {
 						JDialog D = new JDialog(App, "C.A.A.N");
 						D.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 						D.setSize(700, 250);
-						JScrollPane scrollPane = new JScrollPane(table);
+						JScrollPane scrollPane = new JScrollPane(tableExtern);
 						scrollPane.setBounds(0, 0, 700, 250);
-						table = new JTable();
-						scrollPane.setViewportView(table);
-						chercherExemplaireParIDL(id);
+						tableExtern = new JTable();
+						scrollPane.setViewportView(tableExtern);
+						chercherExemplaireParIDL(id,1);
 						D.add(scrollPane);
 						D.setVisible(true);
 					}
@@ -2376,11 +2393,11 @@ public class CAAN extends JFrame {
 							JDialog D = new JDialog(App, "C.A.A.N");
 							D.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 							D.setSize(700, 250);
-							JScrollPane scrollPane = new JScrollPane(table);
+							JScrollPane scrollPane = new JScrollPane(tableExtern);
 							scrollPane.setBounds(0, 0, 700, 250);
-							table = new JTable();
-							scrollPane.setViewportView(table);
-							chercherExemplairePardispo(1);
+							tableExtern = new JTable();
+							scrollPane.setViewportView(tableExtern);
+							chercherExemplairePardispo(1,1);
 							D.add(scrollPane);
 							D.setVisible(true);
 						}
@@ -2389,11 +2406,11 @@ public class CAAN extends JFrame {
 							JDialog D = new JDialog(App, "C.A.A.N");
 							D.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 							D.setSize(700, 250);
-							JScrollPane scrollPane = new JScrollPane(table);
+							JScrollPane scrollPane = new JScrollPane(tableExtern);
 							scrollPane.setBounds(0, 0, 700, 250);
-							table = new JTable();
-							scrollPane.setViewportView(table);
-							chercherExemplairePardispo(0);
+							tableExtern = new JTable();
+							scrollPane.setViewportView(tableExtern);
+							chercherExemplairePardispo(0,1);
 							D.add(scrollPane);
 							D.setVisible(true);
 						}
@@ -2409,11 +2426,11 @@ public class CAAN extends JFrame {
 							JDialog D = new JDialog(App, "C.A.A.N");
 							D.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 							D.setSize(700, 250);
-							JScrollPane scrollPane = new JScrollPane(table);
+							JScrollPane scrollPane = new JScrollPane(tableExtern);
 							scrollPane.setBounds(0, 0, 700, 250);
-							table = new JTable();
-							scrollPane.setViewportView(table);
-							chercherExemplaireParIDLetDispo(id,1);
+							tableExtern = new JTable();
+							scrollPane.setViewportView(tableExtern);
+							chercherExemplaireParIDLetDispo(id,1,1);
 							D.add(scrollPane);
 							D.setVisible(true);
 						}
@@ -2422,11 +2439,11 @@ public class CAAN extends JFrame {
 							JDialog D = new JDialog(App, "C.A.A.N");
 							D.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 							D.setSize(700, 250);
-							JScrollPane scrollPane = new JScrollPane(table);
+							JScrollPane scrollPane = new JScrollPane(tableExtern);
 							scrollPane.setBounds(0, 0, 700, 250);
-							table = new JTable();
-							scrollPane.setViewportView(table);
-							chercherExemplaireParIDLetDispo(id,0);
+							tableExtern = new JTable();
+							scrollPane.setViewportView(tableExtern);
+							chercherExemplaireParIDLetDispo(id,0,1);
 							D.add(scrollPane);
 							D.setVisible(true);
 						}
@@ -2465,10 +2482,10 @@ public class CAAN extends JFrame {
 					JDialog D = new JDialog(App, "C.A.A.N");
 					D.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 					D.setSize(700, 250);
-					JScrollPane scrollPane = new JScrollPane(table);
+					JScrollPane scrollPane = new JScrollPane(tableExtern);
 					scrollPane.setBounds(0, 0, 700, 250);
-					table = new JTable();
-					scrollPane.setViewportView(table);
+					tableExtern = new JTable();
+					scrollPane.setViewportView(tableExtern);
 					afficherExemplaire();
 					D.add(scrollPane);
 					D.setVisible(true); 
@@ -2832,14 +2849,14 @@ public class CAAN extends JFrame {
 		OffreMessage.setVisible(false);
 		offreImage.add(OffreMessage);
 		
-		JScrollPane scrollPaneOffre = new JScrollPane(table);
+		JScrollPane scrollPaneOffre = new JScrollPane(tableOffre);
 		scrollPaneOffre.setBounds(120, 440, 800, 150);
 		scrollPaneOffre.setEnabled(false);
 		offreImage.add(scrollPaneOffre);
 		
-		table = new JTable();
-		table.setEnabled(false);
-		scrollPaneOffre.setViewportView(table);
+		tableOffre = new JTable();
+		tableOffre.setEnabled(false);
+		scrollPaneOffre.setViewportView(tableOffre);
 		
 		
 		ButtonGroup GB3 = new ButtonGroup();
@@ -2880,7 +2897,6 @@ public class CAAN extends JFrame {
 				 
 				 //afficher offres
 				 OffreMessage.setVisible(false);
-				 scrollPaneOffre.setEnabled(false);
 				 startOffre.setEnabled(false);
 				
 			}
@@ -2890,7 +2906,8 @@ public class CAAN extends JFrame {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				
+				selectedOffreupdateC.removeAllItems();
+				selectedOffreupdateC.addItem("");
 				String nomOffreQuery = "SELECT nomOffre FROM offres";
 				try {
 					Statement stm = (Statement) conn.createStatement();
@@ -2926,7 +2943,6 @@ public class CAAN extends JFrame {
 				 
 				 //afficher offres
 				 OffreMessage.setVisible(false);
-				 scrollPaneOffre.setEnabled(false);
 				 startOffre.setEnabled(false);
 				
 			}
@@ -2936,7 +2952,8 @@ public class CAAN extends JFrame {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				
+				selectedOffredeleteC.removeAllItems();
+				selectedOffredeleteC.addItem("");
 				try {
 					String nomOffreQuery = "SELECT nomOffre FROM offres";
 					Statement stm = (Statement) conn.createStatement();
@@ -2971,7 +2988,6 @@ public class CAAN extends JFrame {
 				 
 				 //afficher offres
 				 OffreMessage.setVisible(false);
-				 scrollPaneOffre.setEnabled(false);
 				 startOffre.setEnabled(false);
 				
 			}
@@ -3007,7 +3023,6 @@ public class CAAN extends JFrame {
 				 
 				 //afficher offres
 				 OffreMessage.setVisible(true);
-				 scrollPaneOffre.setEnabled(true);
 				 startOffre.setEnabled(true);
 				
 			}
@@ -3759,13 +3774,13 @@ public class CAAN extends JFrame {
 			
 			
 		
-			JScrollPane scrollPaneLE = new JScrollPane(table);
+			JScrollPane scrollPaneLE = new JScrollPane(tableCherche);
 			scrollPaneLE.setBounds(108, 330, 800, 200);
 			scrollPaneLE.setEnabled(false);
 			CLEImage.add(scrollPaneLE);
 			
-			table = new JTable();
-			scrollPaneLE.setViewportView(table);
+			tableCherche = new JTable();
+			scrollPaneLE.setViewportView(tableCherche);
 			
 			ApplyChercherLiB.addActionListener(new ActionListener() {
 				
@@ -3868,23 +3883,23 @@ public class CAAN extends JFrame {
 						if(type.equals("Id Exemplaire"))
 						{
 							int id = Integer.parseInt(chercheValEx2T.getText());
-							chercherExemplaireParIDE(id);
+							chercherExemplaireParIDE(id,2);
 						}
 						else if(type.equals("Id Livre"))
 						{
 							int id = Integer.parseInt(chercheValEx2T.getText());
-							chercherExemplaireParIDL(id);
+							chercherExemplaireParIDL(id,2);
 						}
 						else if(type.equals("Disponible"))
 						{
 							String dispo = ChDispoEx2.getSelectedItem().toString();
 							if(dispo.equals("OUI"))
 							{
-								chercherExemplairePardispo(1);
+								chercherExemplairePardispo(1,2);
 							}
 							else if(dispo.equals("NON"))
 							{
-								chercherExemplairePardispo(0);
+								chercherExemplairePardispo(0,2);
 						}
 							
 						}
@@ -3895,11 +3910,11 @@ public class CAAN extends JFrame {
 							String dispo = ChDispoEx2.getSelectedItem().toString();
 							if(dispo.equals("OUI"))
 							{
-								chercherExemplaireParIDLetDispo(id,1);
+								chercherExemplaireParIDLetDispo(id,1,2);
 							}
 							else if(dispo.equals("NON"))
 							{
-								chercherExemplaireParIDLetDispo(id,0);
+								chercherExemplaireParIDLetDispo(id,0,2);
 							}
 							
 						}
@@ -4681,6 +4696,17 @@ public class CAAN extends JFrame {
 			newIDNL.setEnabled(false);
 			newIDNT.setEnabled(false);
 			ApplyuUpdateLivreB.setEnabled(false);
+			
+			CatCB.removeAllItems();
+			CatCB.addItem("");
+			String nomCatQuery = "SELECT nomCategorie FROM categorie";
+			try {
+				Statement stm = (Statement) conn.createStatement();
+				ResultSet rs = stm.executeQuery(nomCatQuery);
+				while(rs.next()) {
+					CatCB.addItem(rs.getString(1));
+				}
+			} catch (Exception e2) {}
 			
 			IDLivreL2.setEnabled(false);
 			IDLivreT2.setEnabled(false);
@@ -5635,10 +5661,10 @@ public class CAAN extends JFrame {
 					JDialog D = new JDialog(App, "C.A.A.N");
 					D.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 					D.setSize(700, 250);
-					JScrollPane scrollPane = new JScrollPane(table);
+					JScrollPane scrollPane = new JScrollPane(tableExtern);
 					scrollPane.setBounds(0, 0, 500, 250);
-					table = new JTable();
-					scrollPane.setViewportView(table);
+					tableExtern = new JTable();
+					scrollPane.setViewportView(tableExtern);
 					AfficherLivre();
 					D.add(scrollPane);
 					D.setVisible(true); 
@@ -5672,10 +5698,10 @@ public class CAAN extends JFrame {
 					JDialog D = new JDialog(App, "C.A.A.N");
 					D.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 					D.setSize(700, 250);
-					JScrollPane scrollPane = new JScrollPane(table);
+					JScrollPane scrollPane = new JScrollPane(tableExtern);
 					scrollPane.setBounds(0, 0, 500, 250);
-					table = new JTable();
-					scrollPane.setViewportView(table);
+					tableExtern = new JTable();
+					scrollPane.setViewportView(tableExtern);
 					AfficherCategorie();
 					D.add(scrollPane);
 					D.setVisible(true); 
@@ -5698,10 +5724,10 @@ public class CAAN extends JFrame {
 					JDialog D = new JDialog(App, "C.A.A.N");
 					D.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 					D.setSize(700, 250);
-					JScrollPane scrollPane = new JScrollPane(table);
+					JScrollPane scrollPane = new JScrollPane(tableExtern);
 					scrollPane.setBounds(0, 0, 500, 250);
-					table = new JTable();
-					scrollPane.setViewportView(table);
+					tableExtern = new JTable();
+					scrollPane.setViewportView(tableExtern);
 					AfficherAuteur();
 					D.add(scrollPane);
 					D.setVisible(true); 

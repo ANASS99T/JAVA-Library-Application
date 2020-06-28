@@ -1,8 +1,11 @@
 import java.sql.CallableStatement;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.Types;
 
 import javax.swing.JOptionPane;
+import javax.swing.RepaintManager;
 
 public class offre {
 	
@@ -135,13 +138,28 @@ public class offre {
 	public static void deleteOffre(int id)
 	{
 		try {	
+			CallableStatement cs2 =conn.prepareCall("{? = call Offre_dispo(?)} ");
+			cs2.registerOutParameter(1, java.sql.Types.INTEGER);
+			cs2.setInt(2, id);
+			cs2.execute();
+			int offreExiste = cs2.getInt(1);
+			
+			if(offreExiste == 0)
+			{
+				JOptionPane.showMessageDialog(null, "Vous ne pouvez pas supprimer cette Offre, c'est deja utilisee");
+				return;
+			}
+			else
+			{
 				CallableStatement updateOffreS = conn.prepareCall("{call supprimerOffre(?)}");
 				updateOffreS.setInt(1, id);
 				updateOffreS.execute();
 				JOptionPane.showMessageDialog(CAAN.App, "L\'offre est supprime");
+			}
 		}
 		catch(Exception e) {
-			JOptionPane.showMessageDialog(null, "erreur rencontre ","erreur", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(null, "Vous ne pouvez pas supprimer cette Offre, c'est deja utilisee","erreur", JOptionPane.ERROR_MESSAGE);
+			e.printStackTrace();
 		}
 	}
 	
@@ -149,6 +167,7 @@ public class offre {
 	{
 		int NbL = 0;
 		try {
+			
 			CallableStatement cs2 =conn.prepareCall("{? = call nombreLivresOffre(?)} ");
 			cs2.registerOutParameter(1, java.sql.Types.INTEGER);
 			cs2.setInt(2, idOffre);

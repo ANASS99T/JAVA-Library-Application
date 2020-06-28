@@ -1,8 +1,9 @@
 import java.sql.CallableStatement;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
+import java.sql.Statement;
 
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
@@ -81,6 +82,20 @@ public class Client {
 			int existe = clientexisteS.getInt(1);
 			if(existe == 1)
 			{
+				int testId = 0;
+				try {
+					PreparedStatement ps = conn.prepareStatement("SELECT idClient FROM emprunt WHERE dateRetour IS NULL AND idClient = ?");
+					ps.setInt(1, 16);
+					ResultSet rs = ps.executeQuery();
+					rs.next();
+					testId = rs.getInt(1);
+				} catch (Exception e2) {}
+				
+				if(testId != 0)
+				{
+					JOptionPane.showMessageDialog(null, "Ce client a deja des exemplaire non retournes");
+					return;
+				}
 				CallableStatement st = conn.prepareCall("{call supprimerClient(?)}");
 				st.setInt(1, id);
 				st.execute();
